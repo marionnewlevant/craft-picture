@@ -1,0 +1,16 @@
+{# passed source and imagerImages #}
+<source
+  {% if source.media ?? false %}
+    media="{{ source.media }}"
+  {% endif %}
+  {% if imagerImages %}
+    srcset="
+    {% for i in imagerImages %}
+      {{ i.url }} {{ i.width }}w{% if not loop.last %},{% endif %}
+    {% endfor %}
+    "
+  {% endif %}
+  {% if source.sizes ?? false %}
+    sizes="{{ source.sizes }}"
+  {% endif %}
+/>

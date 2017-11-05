@@ -1,0 +1,12 @@
+{% extends '_layouts/cp' %}
+
+{% set title = 'Picture install error: Imager or FocalPointField not installed' %}
+
+{% set content %}
+  <p>
+    The Picture plugin relies on the <a href="https://github.com/aelvan/Imager-Craft">Imager</a> plugin,
+    and (if you have set focalPointField in your config file) also the
+    <a href="https://github.com/aelvan/FocalPointField-Craft">FocalPointField</a>.
+    Check that these plugins are installed and enabled.
+  </p>
+{% endset %}

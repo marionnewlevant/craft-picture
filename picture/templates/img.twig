@@ -1,0 +1,18 @@
+{# passed img and imagerImages and attrs #}
+
+<img
+  {% if imagerImages|length > 1 %}
+    srcset="
+    {% for i in imagerImages %}
+      {{ i.url }} {{ i.width }}w{% if not loop.last %},{% endif %}
+    {% endfor %}
+    "
+  {% endif %}
+  {% if img.sizes ?? false %}
+    sizes="{{ img.sizes }}"
+  {% endif %}
+  src="{{ imagerImages[0].url ?? '' }}"
+  {% for key, value in attrs %}
+    {{ key }}="{{ value }}"
+  {% endfor %}
+/>
