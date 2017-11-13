@@ -136,7 +136,7 @@ You will also want to configure the Imager plugin. I always set
 
 Use picture in your templates like this:
 
-    {{ craft.picture.picture(asset, style, options) }}
+    {{ craft.picture.element(asset, style, options) }}
 
 - `asset` is an [AssetFileModel](https://craftcms.com/docs/templating/assetfilemodel) - a regular Craft asset
 - `style` is the name of the image style. It is optional, and if missing, the _default_ style will be used.
@@ -146,7 +146,7 @@ Use picture in your templates like this:
 
 Example for a thumb style image with alt text of _thumbAlt_, and the crop position _bottom-right_ and jpegQuality of _80_:
 
-    {{ craft.picture.picture(
+    {{ craft.picture.element(
          entry.image.first,
          'thumb',
          {
@@ -160,7 +160,7 @@ Example for a thumb style image with alt text of _thumbAlt_, and the crop positi
 
 ## Tips
 
-I use a twig macro which handles missing images and svg images before calling _craft.picture.picture_.
+I use a twig macro which handles missing images and svg images before calling _craft.picture.element_.
 
 I define a style _preparse_ which includes all the different transforms, and generate that style in a [Preparse](https://github.com/aelvan/Preparse-Field-Craft) field when the entry is saved to pre-build the transforms.
 

@@ -23,7 +23,7 @@ class PictureVariable
      * @param array | null $options
      * @return \Twig_Markup
      */
-    public function picture(AssetFileModel $asset, $assetStyle='default', $options=null)
+    public function element(AssetFileModel $asset, $assetStyle='default', $options=null)
     {
         return craft()->picture->picture($asset, $assetStyle, $options);
     }
