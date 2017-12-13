@@ -16,6 +16,7 @@ namespace Craft;
 class PictureService extends BaseApplicationComponent
 {
     private $_styles = array();
+    private $_transforms = array();
     private $_focalPointField = false;
 
     /**
@@ -26,7 +27,7 @@ class PictureService extends BaseApplicationComponent
      * @param array | null $options
      * @return \Twig_Markup
      */
-    public function picture(AssetFileModel $asset, $assetStyle, $options = null)
+    public function element(AssetFileModel $asset, $assetStyle, $options = null)
     {
         // priority order for configuration (low to high):
         // imager config file
@@ -39,9 +40,6 @@ class PictureService extends BaseApplicationComponent
         {
             $options = array();
         }
-        $oldPath = craft()->templates->getTemplatesPath();
-        $newPath = craft()->path->getPluginsPath().'picture/templates';
-        craft()->templates->setTemplatesPath($newPath);
 
         $sourcesHtml = '';
         $imgHtml = '';
@@ -60,6 +58,9 @@ class PictureService extends BaseApplicationComponent
         $optionsConfigOverrides = array_key_exists('configOverrides', $options) ? $options['configOverrides'] : array();
         unset($options['configOverrides']);
 
+        $oldPath = craft()->templates->getTemplatesPath();
+        $newPath = craft()->path->getPluginsPath().'picture/templates';
+        craft()->templates->setTemplatesPath($newPath);
         foreach ((array_key_exists('sources', $style) ? $style['sources'] : array()) as $source) {
             $imagerImages = $this->_imagerImages($asset, $source, $styleTransformDefaults, $styleConfigOverrides, $optionsTransformDefaults, $optionsConfigOverrides);
             $sourcesHtml .= craft()->templates->render('source',
@@ -89,11 +90,44 @@ class PictureService extends BaseApplicationComponent
         return TemplateHelper::getRaw($html);
     }
 
+    public function url(AssetFileModel $asset, $assetTransform, $options = null)
+    {
+
+        // priority order for configuration (low to high):
+        // imager config file
+        // image class config in picture config file
+        // individual source config in picture config file
+        // focal point of the image (position only)
+        // options passed in on the call
+
+        if (null === $options)
+        {
+            $options = array();
+        }
+        $style = $this->_getTransform($assetTransform);
+        $styleTransformDefaults = array_key_exists('transformDefaults', $style) ? $style['transformDefaults'] : array();
+        $styleConfigOverrides = array_key_exists('configOverrides', $style) ? $style['configOverrides'] : array();
+
+        $optionsTransformDefaults = array_key_exists('transformDefaults', $options) ? $options['transformDefaults'] : array();
+        unset($options['transformDefaults']);
+        $focalPointField = $this->getFocalPointField();
+        if ($focalPointField && !array_key_exists('position', $optionsTransformDefaults))
+        {
+            $optionsTransformDefaults['position'] = $asset->$focalPointField;
+        }
+        $optionsConfigOverrides = array_key_exists('configOverrides', $options) ? $options['configOverrides'] : array();
+        unset($options['configOverrides']);
+
+        $imagerImages = $this->_imagerImages($asset, $style, $styleTransformDefaults, $styleConfigOverrides, $optionsTransformDefaults, $optionsConfigOverrides);
+        $url = $imagerImages[0]->url;
+        return TemplateHelper::getRaw($url);
+    }
+
     /**
      * Call imager to generate the transformed images.
      *
      * @param AssetFileModel $asset
-     * @param array          $config The source or img configuration from the style.
+     * @param array          $config The source or img configuration from the style, or the config for the transformation
      * @param array          $styleTransformDefaults transformDefaults global to the image style.
      * @param array          $styleConfigOverrides configOverrides global to the image style.
      * @param array          $optionsTransformDefaults transformDefaults passed in options. Also includes the focal point position.
@@ -106,7 +140,8 @@ class PictureService extends BaseApplicationComponent
         $transformDefaults = array_merge($styleTransformDefaults, (array_key_exists('transformDefaults', $config) ? $config['transformDefaults'] : array()), $optionsTransformDefaults);
         $configOverrides = array_merge($styleConfigOverrides, (array_key_exists('configOverrides', $config) ? $config['configOverrides'] : array()), $optionsConfigOverrides);
         $aspectRatio = array_key_exists('aspectRatio', $config) ? $config['aspectRatio'] : null;
-        $widths = array_key_exists('widths', $config) ? $config['widths'] : array();
+        // we accept either 'widths' - an array, or 'width' - a single number
+        $widths = array_key_exists('widths', $config) ? $config['widths'] : (array_key_exists('width', $config) ? array($config['width']) : array());
 
         $imagerImages = array();
         foreach ($widths as $width) {
@@ -136,6 +171,30 @@ class PictureService extends BaseApplicationComponent
         if (array_key_exists('default', $this->_styles))
         {
             return $this->_styles['default'];
+        }
+        return array();
+    }
+
+    /**
+     * Get the transform configuration.
+     *
+     * @param string $assetTransform
+     *
+     * @return array
+     */
+    private function _getTransform($assetTransform)
+    {
+        if (!$this->_transforms)
+        {
+            $this->_transforms = craft()->config->get('urlTransforms', 'picture');
+        }
+        if (array_key_exists($assetTransform, $this->_transforms))
+        {
+            return $this->_transforms[$assetTransform];
+        }
+        if (array_key_exists('default', $this->_transforms))
+        {
+            return $this->_transforms['default'];
         }
         return array();
     }
