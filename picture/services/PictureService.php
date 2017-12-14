@@ -146,7 +146,9 @@ class PictureService extends BaseApplicationComponent
         $imagerImages = array();
         foreach ($widths as $width) {
             $imagerImage = craft()->imager->transformImage($asset, PictureService::_transform($width, $aspectRatio), $transformDefaults, $configOverrides);
-            $imagerImages[] = $imagerImage;
+            if ($imagerImage) {
+                $imagerImages[] = $imagerImage;
+            }
         }
         return $imagerImages;
     }
