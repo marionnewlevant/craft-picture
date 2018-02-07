@@ -1,11 +1,11 @@
-{# passed source and imagerImages #}
+{# passed source and transformedImages #}
 <source
   {% if source.media ?? false %}
     media="{{ source.media }}"
   {% endif %}
-  {% if imagerImages %}
+  {% if transformedImages %}
     srcset="
-    {% for i in imagerImages %}
+    {% for i in transformedImages %}
       {{ i.url }} {{ i.width }}w{% if not loop.last %},{% endif %}
     {% endfor %}
     "

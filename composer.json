@@ -1,0 +1,41 @@
+{
+  "name": "marionnewlevant/picture",
+  "description": "Generate responsive <picture> and <img> elements based on configuration.",
+  "version": "2.0.0",
+  "type": "craft-plugin",
+  "keywords": [
+    "craft", "craftcms", "plugin", "picture"
+  ],
+  "support": {
+    "docs": "https://github.com/craft-picture/picture/blob/v2/README.md",
+    "issues": "https://github.com/craft-picture/picture/issues"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Marion Newlevant",
+      "homepage": "http://marion.newlevant.com"
+    }
+  ],
+  "require": {
+    "craftcms/cms": "^3.0.0-RC1"
+  },
+  "autoload": {
+    "psr-4": {
+      "marionnewlevant\\picture\\": "src/"
+    }
+  },
+  "extra": {
+    "handle": "picture",
+    "name": "Picture",
+    "schemaVersion": "2.0.0",
+    "hasCpSettings": false,
+    "hasCpSection": false,
+    "documentationUrl": "https://github.com/marionnewlevant/craft-picture/blob/v2/README.md",
+    "changelogUrl": "https://raw.githubusercontent.com/marionnewlevant/craft-picture/v2/CHANGELOG.md",
+    "components": {
+      "pictureService": "marionnewlevant\\picture\\services\\PictureService"
+    },
+    "class": "marionnewlevant\\picture\\Picture"
+  }
+}

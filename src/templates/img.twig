@@ -1,9 +1,9 @@
-{# passed img and imagerImages and attrs #}
+{# passed img and transformedImages and attrs #}
 
 <img
-  {% if imagerImages|length > 1 %}
+  {% if transformedImages|length > 1 %}
     srcset="
-    {% for i in imagerImages %}
+    {% for i in transformedImages %}
       {{ i.url }} {{ i.width }}w{% if not loop.last %},{% endif %}
     {% endfor %}
     "
@@ -11,7 +11,7 @@
   {% if img.sizes ?? false %}
     sizes="{{ img.sizes }}"
   {% endif %}
-  src="{{ imagerImages[0].url ?? '' }}"
+  src="{{ transformedImages[0].url ?? '' }}"
   {% for key, value in attrs %}
     {{ key }}="{{ value }}"
   {% endfor %}
