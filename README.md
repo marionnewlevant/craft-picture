@@ -1,7 +1,8 @@
-# picture plugin for Craft CMS
+# picture plugin for Craft 3
 
 Generate &lt;picture&gt; elements.
 
+## See v1 branch for the Craft 2 version
 
 ## Installation
 
