@@ -187,15 +187,31 @@ class PictureService extends Component
      */
     private function _transformedImages(Asset $asset, $config, $styleTransform, $optionsTransform)
     {
-        // TODO: be smart about not upscaling
         $transform = array_merge($styleTransform, (array_key_exists('transform', $config) ? $config['transform'] : []), $optionsTransform);
         $aspectRatio = array_key_exists('aspectRatio', $config) ? $config['aspectRatio'] : null;
+
+        // what can we transform to w/o upscaling?
+        $maxTransformWidth = PictureService::_maxTransformWidth($asset, $aspectRatio, $transform);
         // we accept either 'widths' - an array, or 'width' - a single number
         $widths = array_key_exists('widths', $config) ? $config['widths'] : (array_key_exists('width', $config) ? [$config['width']] : []);
 
         $transformedImages = [];
         foreach ($widths as $width) {
-            $transformedUrl = $asset->getUrl(PictureService::_transform($width, $aspectRatio, $transform));
+            if ($maxTransformWidth && $width <= $maxTransformWidth)
+            {
+                $transformedUrl = $asset->getUrl(PictureService::_transform($width, $aspectRatio, $transform));
+                if ($transformedUrl) {
+                    $transformedImages[] = [
+                        'width' => $width,
+                        'url' => $transformedUrl
+                    ];
+                }
+            }
+        }
+        if (!$transformedImages)
+        {
+            // if we didn't get any (probably because of upscaling, try at our native width)
+            $transformedUrl = $asset->getUrl(PictureService::_transform($asset->width, $aspectRatio, $transform));
             if ($transformedUrl) {
                 $transformedImages[] = [
                     'width' => $width,
@@ -214,6 +230,21 @@ class PictureService extends Component
             $transform['height'] = $width / $aspectRatio;
         }
         return $transform;
+    }
+
+    private static function _maxTransformWidth($asset, $aspectRatio, $transform)
+    {
+        $nativeWidth = $asset->width;
+        if (!$aspectRatio) { return $nativeWidth; }
+
+        $mode = array_key_exists('mode', $transform) ? $transform['mode'] : 'crop';
+        if ($mode != 'crop') { return false; }
+        // we have to handle the aspectRatio...
+        $nativeHeight = $asset->height;
+        if (($nativeWidth / $nativeHeight) <= $aspectRatio) {
+            return $nativeWidth;
+        }
+        return $aspectRatio * $nativeHeight;
     }
 
 

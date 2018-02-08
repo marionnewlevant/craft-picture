@@ -162,6 +162,8 @@ Each individual element in `urlTransforms` can have:
 - aspectRatio: optional aspect ratio
 - transform: additional craft transform parameters
 
+Whenever possible, Picture avoids generating transforms that will up-scale the original image.
+
 ## Using craft.picture.element
 
 Use craft.picture.element in your templates like this:
