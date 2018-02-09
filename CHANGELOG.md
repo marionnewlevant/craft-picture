@@ -1,5 +1,9 @@
 # Picture Changelog
 
+## 2.0.2 - 2018.02.09
+### Added
+- craft.picture.urlTransforms and craft.picture.imageStyles
+
 ## 2.0.1 - 2018.02.07
 ### Added
 - Avoids upscaling transforms

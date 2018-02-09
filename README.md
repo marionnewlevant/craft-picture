@@ -17,7 +17,7 @@ or
 
 Creates the transforms for an asset, and generates a &lt;picture&gt; or &lt;img&gt; element, or simply returns the transformed image url. Most of the work is in writing the configuration that describes the different image styles.
 
-The plugin provides two variables: craft.picture.element generates &lt;picture&gt; and &lt;img&gt; elements, which contain multiple urls for transfomations of a single image. craft.picture.url generates a single url, useful when the image is a `background-image`.
+The plugin provides four variables: craft.picture.element generates &lt;picture&gt; and &lt;img&gt; elements, which contain multiple urls for transfomations of a single image. craft.picture.url generates a single url, useful when the image is a `background-image`. Additionally, craft.picture.imageStyles returns an array of the names of the defined image styles, and craft.picture.urlTransforms returns an array of the names of the defined urlTransforms.
 
 ## integration with [ImageOptimize](https://github.com/nystudio107/craft-imageoptimize)
 

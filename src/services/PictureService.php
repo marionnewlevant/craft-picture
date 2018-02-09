@@ -90,7 +90,7 @@ class PictureService extends Component
         }
 
         Craft::$app->view->setTemplateMode($oldMode);
-        
+
         // if we have sources, wrap it in a <picture> element. Otherwise, just the <img>
         $html = $sourcesHtml ? '<picture>'.$sourcesHtml.$imgHtml.'</picture>' : $imgHtml;
         return Template::raw($html);
@@ -125,6 +125,16 @@ class PictureService extends Component
         return Template::raw($url);
     }
 
+    public function imageStyles()
+    {
+        return array_keys($this->_getImageStyles());
+    }
+
+    public function urlTransforms()
+    {
+        return array_keys($this->_getUrlTransforms());
+    }
+
     /**
      * Get the style configuration.
      *
@@ -134,20 +144,26 @@ class PictureService extends Component
      */
     private function _getStyle($assetStyle)
     {
+        $styles = $this->_getImageStyles();
+        if (array_key_exists($assetStyle, $styles))
+        {
+            return $styles[$assetStyle];
+        }
+        if (array_key_exists('default', $styles))
+        {
+            return $styles['default'];
+        }
+        return [];
+    }
+
+    private function _getImageStyles()
+    {
         if (!$this->_styles)
         {
             $config = Craft::$app->getConfig()->getConfigFromFile('picture');
             $this->_styles = array_key_exists('imageStyles', $config) ? $config['imageStyles'] : [];
         }
-        if (array_key_exists($assetStyle, $this->_styles))
-        {
-            return $this->_styles[$assetStyle];
-        }
-        if (array_key_exists('default', $this->_styles))
-        {
-            return $this->_styles['default'];
-        }
-        return [];
+        return $this->_styles;
     }
 
     /**
@@ -159,20 +175,26 @@ class PictureService extends Component
      */
     private function _getTransform($assetTransform)
     {
+        $urlTransforms = $this->_getUrlTransforms;
+        if (array_key_exists($assetTransform, $urlTransforms))
+        {
+            return $urlTransforms[$assetTransform];
+        }
+        if (array_key_exists('default', $urlTransforms))
+        {
+            return $urlTransforms['default'];
+        }
+        return [];
+    }
+
+    private function _getUrlTransforms()
+    {
         if (!$this->_transforms)
         {
             $config = Craft::$app->getConfig()->getConfigFromFile('picture');
             $this->_transforms = array_key_exists('urlTransforms', $config) ? $config['urlTransforms'] : [];
         }
-        if (array_key_exists($assetTransform, $this->_transforms))
-        {
-            return $this->_transforms[$assetTransform];
-        }
-        if (array_key_exists('default', $this->_transforms))
-        {
-            return $this->_transforms['default'];
-        }
-        return [];
+        return $this->_transforms;
     }
 
     /**
