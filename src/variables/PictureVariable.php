@@ -57,4 +57,14 @@ class PictureVariable
     {
         return Picture::$plugin->pictureService->url($asset, $assetStyle, $options);
     }
+
+    public function imageStyles()
+    {
+        return Picture::$plugin->pictureService->imageStyles();
+    }
+    
+    public function urlTransforms()
+    {
+        return Picture::$plugin->pictureService->urlTransforms();
+    }
 }
