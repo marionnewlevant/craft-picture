@@ -260,7 +260,7 @@ class PictureService extends Component
         if (!$aspectRatio) { return $nativeWidth; }
 
         $mode = array_key_exists('mode', $transform) ? $transform['mode'] : 'crop';
-        if ($mode != 'crop') { return false; }
+        if ($mode != 'crop') { return $nativeWidth; }
         // we have to handle the aspectRatio...
         $nativeHeight = $asset->height;
         if (($nativeWidth / $nativeHeight) <= $aspectRatio) {
