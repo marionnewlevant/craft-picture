@@ -175,7 +175,7 @@ class PictureService extends Component
      */
     private function _getTransform($assetTransform)
     {
-        $urlTransforms = $this->_getUrlTransforms;
+        $urlTransforms = $this->_getUrlTransforms();
         if (array_key_exists($assetTransform, $urlTransforms))
         {
             return $urlTransforms[$assetTransform];
@@ -233,10 +233,10 @@ class PictureService extends Component
         if (!$transformedImages)
         {
             // if we didn't get any (probably because of upscaling, try at our native width)
-            $transformedUrl = $asset->getUrl(PictureService::_transform($asset->width, $aspectRatio, $transform));
+            $transformedUrl = $aspectRatio ? $asset->getUrl(PictureService::_transform($asset->width, $aspectRatio, $transform)) : $asset->getUrl(null);
             if ($transformedUrl) {
                 $transformedImages[] = [
-                    'width' => $width,
+                    'width' => $asset->width,
                     'url' => $transformedUrl
                 ];
             }
