@@ -1,5 +1,9 @@
 # Picture Changelog
 
+## 2.0.4 - 2018.05.01
+### Fixed
+- problems when no config file fixed
+
 ## 2.0.3 - 2018.03.01
 ### Fixed
 - failed to transform for non-crop transforms
