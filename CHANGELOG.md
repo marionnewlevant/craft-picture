@@ -1,5 +1,9 @@
 # Picture Changelog
 
+## 2.0.5 - 2018.05.01
+### Fixed
+- display untransformed asset when no config for style
+
 ## 2.0.4 - 2018.05.01
 ### Fixed
 - problems when no config file fixed

@@ -1,4 +1,4 @@
-{# passed img and transformedImages and attrs #}
+{# passed img and transformedImages and attrs and asset #}
 
 <img
   {% if transformedImages|length > 1 %}
@@ -11,7 +11,7 @@
   {% if img.sizes ?? false %}
     sizes="{{ img.sizes }}"
   {% endif %}
-  src="{{ transformedImages[0].url ?? '' }}"
+  src="{{ transformedImages[0].url ?? asset.getUrl(null) }}"
   {% for key, value in attrs %}
     {{ key }}="{{ value }}"
   {% endfor %}

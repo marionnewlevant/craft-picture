@@ -85,6 +85,18 @@ class PictureService extends Component
                     'img' => $img,
                     'transformedImages' => $transformedImages,
                     'attrs' => $options,
+                    'asset' => $asset,
+                )
+            );
+        }
+        else
+        {
+            $imgHtml = Craft::$app->view->renderTemplate('picture/img',
+                array(
+                    'img' => [],
+                    'transformedImages' => [],
+                    'attrs' => $options,
+                    'asset' => $asset,
                 )
             );
         }
@@ -268,6 +280,5 @@ class PictureService extends Component
         }
         return $aspectRatio * $nativeHeight;
     }
-
 
 }
