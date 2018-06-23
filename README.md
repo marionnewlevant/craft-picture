@@ -115,7 +115,7 @@ Here is a sample configuration file:
           ]
         ],
 
-        // style for elements that use lazysizes for lazyloading.
+        // the 'lazyLoaded' style for elements that use lazysizes for lazyloading.
         // <img
         //   class="lazyload"
         //   data-srcset="transform500pxUrl 500w, transform1000pxUrl 1000w"
@@ -168,7 +168,7 @@ Each source can have all of those, plus
 
 Additionally, the style as a whole can have:
 
-- transform: optional Imager transformDefaults
+- transform: optional Craft transform parameters
 - lazysizes: optional value which determines whether the element is will be lazyloaded with [lazysizes](https://github.com/aFarkas/lazysizes). Will generate `data-srcset`, `data-sizes` and `data-src` attributes instead of `srcset`, `sizes`, and `src`. Will add a `class` attribute with value `class="lazyload"`, or add `lazyload` to any existing `class` attribute. Values are:
   - false - not lazyloaded (the default)
   - true - lazyloaded, no fallback `src` attribute
