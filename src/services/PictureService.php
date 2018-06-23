@@ -63,6 +63,9 @@ class PictureService extends Component
         $optionsTransform = array_key_exists('transform', $options) ? $options['transform'] : [];
         unset($options['transform']);
 
+        $lazysizes = array_key_exists('lazysizes', $options) ? $options['lazysizes'] : (array_key_exists('lazysizes', $style) ? $style['lazysizes'] : false);
+        unset($options['lazysizes']);
+
         $oldMode = Craft::$app->view->getTemplateMode();
         Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_CP);
 
@@ -72,6 +75,7 @@ class PictureService extends Component
                 [
                     'source' => $source,
                     'transformedImages' => $transformedImages,
+                    'lazysizes' => $lazysizes,
                 ]
             );
         }
@@ -86,6 +90,7 @@ class PictureService extends Component
                     'transformedImages' => $transformedImages,
                     'attrs' => $options,
                     'asset' => $asset,
+                    'lazysizes' => $lazysizes,
                 )
             );
         }

@@ -19,10 +19,6 @@ Creates the transforms for an asset, and generates a &lt;picture&gt; or &lt;img&
 
 The plugin provides four variables: craft.picture.element generates &lt;picture&gt; and &lt;img&gt; elements, which contain multiple urls for transfomations of a single image. craft.picture.url generates a single url, useful when the image is a `background-image`. Additionally, craft.picture.imageStyles returns an array of the names of the defined image styles, and craft.picture.urlTransforms returns an array of the names of the defined urlTransforms.
 
-## integration with [ImageOptimize](https://github.com/nystudio107/craft-imageoptimize)
-
-The ImageOptimize plugin will automatically run image optimizers such as jpegoptim on your transformed images. It works well with this plugin, and no additional changes are required.
-
 ## Configuring picture
 
 You need a config file, `craft/config/picture.php`. That file defines the different image styles for your project.
@@ -118,6 +114,23 @@ Here is a sample configuration file:
             'format' => 'jpg'
           ]
         ],
+
+        // style for elements that use lazysizes for lazyloading.
+        // <img
+        //   class="lazyload"
+        //   data-srcset="transform500pxUrl 500w, transform1000pxUrl 1000w"
+        //   data-sizes="25vw"
+        //   data-src="transform500pxUrl"
+        // />
+        'lazyLoaded' => [
+          // optional lazysizes. Can be boolean (true = lazysizes, false = no lazysizes) or
+          // string (uses string value for src attribute value)
+          'lazysizes' => true,
+          'img' => [
+            'sizes' => '25vw',
+            'widths' => [500, 1000]
+          ]
+        ],
      
         // the default style will be used when none is specified.
         'default' => [
@@ -146,7 +159,7 @@ Each individual element in `imageStyles` has an optional array of `sources` and 
 
 - sizes: optional sizes attribute
 - widths: array of pixel widths. Must have at least one
-- aspectRatio: optional aspect ratio
+- aspectRatio: optional aspect ratio, width / height. Values &lt; 1 for portrait, values &gt; 1 for landscape.
 - transform: additional craft transform parameters (width is set by the plugin, and so is height if the aspect ratio is specified)
 
 Each source can have all of those, plus
@@ -156,6 +169,10 @@ Each source can have all of those, plus
 Additionally, the style as a whole can have:
 
 - transform: optional Imager transformDefaults
+- lazysizes: optional value which determines whether the element is will be lazyloaded with [lazysizes](https://github.com/aFarkas/lazysizes). Will generate `data-srcset`, `data-sizes` and `data-src` attributes instead of `srcset`, `sizes`, and `src`. Will add a `class` attribute with value `class="lazyload"`, or add `lazyload` to any existing `class` attribute. Values are:
+  - false - not lazyloaded (the default)
+  - true - lazyloaded, no fallback `src` attribute
+  - string - lazyloaded, value will be the `src` attribute value.
 
 Each individual element in `urlTransforms` can have:
 
@@ -175,12 +192,13 @@ Use craft.picture.element in your templates like this:
 - `style` is the name of the image style. It is optional, and if missing, the _default_ style will be used.
 - `options` is an optional hash of options.
   - `transform` - additional Craft transform parameters
+  - `lazysizes` - overrides any `lazysizes` value on the image style in the config file.
   - anything else will be attributes on the &lt;img&gt; element.
 
 Example for a thumb style image with alt text of _thumbAlt_, and the crop position _bottom-right_ and quality of _80_:
 
     {{ craft.picture.element(
-         entry.image.first,
+         entry.image.one,
          'thumb',
          {
            alt: 'thumbAlt',
@@ -195,7 +213,23 @@ Example for a thumb style image with alt text of _thumbAlt_, and the crop positi
 
 For a hero image used as a background image:
 
-    <div class="hero" style="background-image: url({{ craft.picture.url(entry.hero, 'hero') }})"></div>
+    <div
+      class="hero"
+      style="background-image: url({{ craft.picture.url(entry.hero.one, 'hero') }})"
+    ></div>
+
+
+## integration with [ImageOptimize](https://github.com/nystudio107/craft-imageoptimize)
+
+The ImageOptimize plugin will automatically run image optimizers such as jpegoptim on your transformed images. It works well with this plugin, and no additional changes are required.
+
+## integration with [lazysizes](https://github.com/aFarkas/lazysizes)
+
+A lazysizes value can be set in either the style configuration in `config/picture.php` or in the options passed to `craft.picture.element`. By specifying `lazysizes` in the options, you can:
+
+  - turn off lazyloading for images that are "above the fold"
+  - use ImageOptimize [placeholder images](https://github.com/nystudio107/craft-imageoptimize#placeholder-images) for the `src` attribute
+
 
 ## Tips
 

@@ -1,18 +1,31 @@
-{# passed img and transformedImages and attrs and asset #}
-
+{# passed img and transformedImages and attrs and asset and lazysizes #}
+{% set doLazysizes = lazysizes is not same as(false) %}
 <img
   {% if transformedImages|length > 1 %}
-    srcset="
+    {{ doLazysizes ? 'data-' }}srcset="
     {% for i in transformedImages %}
       {{ i.url }} {{ i.width }}w{% if not loop.last %},{% endif %}
     {% endfor %}
     "
   {% endif %}
   {% if img.sizes ?? false %}
-    sizes="{{ img.sizes }}"
+    {{ doLazysizes ? 'data-' }}sizes="{{ img.sizes }}"
   {% endif %}
-  src="{{ transformedImages[0].url ?? asset.getUrl(null) }}"
+  {{ doLazysizes ? 'data-' }}src="{{ transformedImages[0].url ?? asset.getUrl(null) }}"
+  {% set classOutput = false %}
   {% for key, value in attrs %}
-    {{ key }}="{{ value }}"
+    {% if key == 'class' %}
+      {% set classOutput = true %}
+      {{ key }}="{{ value }} lazyload"
+    {% else %}
+      {{ key }}="{{ value }}"
+    {% endif %}
   {% endfor %}
+  {% if not classOutput %}
+    class="lazyload"
+  {% endif %}
+  {% if doLazysizes and (lazysizes is not same as(true)) %}
+    src="{{ lazysizes }}"
+  {% endif %}
 />
+

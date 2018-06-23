@@ -1,5 +1,9 @@
 # Picture Changelog
 
+## 2.1.0 - 2018.06.23
+### Added
+- Support for [lazysizes](https://github.com/aFarkas/lazysizes)
+
 ## 2.0.5 - 2018.05.01
 ### Fixed
 - display untransformed asset when no config for style

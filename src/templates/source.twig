@@ -1,16 +1,17 @@
-{# passed source and transformedImages #}
+{# passed source and transformedImages and lazysizes #}
+{% set doLazysizes = lazysizes is not same as(false) %}
 <source
   {% if source.media ?? false %}
     media="{{ source.media }}"
   {% endif %}
   {% if transformedImages %}
-    srcset="
+    {{ doLazysizes ? 'data-' }}srcset="
     {% for i in transformedImages %}
       {{ i.url }} {{ i.width }}w{% if not loop.last %},{% endif %}
     {% endfor %}
     "
   {% endif %}
   {% if source.sizes ?? false %}
-    sizes="{{ source.sizes }}"
+    {{ doLazysizes ? 'data-' }}sizes="{{ source.sizes }}"
   {% endif %}
 />
