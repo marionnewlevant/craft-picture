@@ -181,7 +181,7 @@ Each source can have all of those, plus
 Additionally, the style as a whole can have:
 
 - transform: optional Craft transform parameters
-- lazysizes: optional value which determines whether the element is will be
+- lazysizes: optional value which determines whether the element will be
 lazyloaded with [lazysizes](https://github.com/aFarkas/lazysizes).
 Will generate `data-srcset`, `data-sizes` and `data-src` attributes instead of
 `srcset`, `sizes`, and `src`. Will add a `class` attribute with value
