@@ -40,9 +40,13 @@ class PictureVariable
      * @param array | null $options
      * @return \Twig_Markup
      */
-    public function element(Asset $asset, $assetStyle='default', $options=null)
+    public function element($assetSet, $assetStyle='default', $options=null)
     {
-        return Picture::$plugin->pictureService->element($asset, $assetStyle, $options);
+        if (!is_array($assetSet))
+        {
+            $assetSet = [$assetSet];
+        }
+        return Picture::$plugin->pictureService->element($assetSet, $assetStyle, $options);
     }
 
     /**

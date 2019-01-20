@@ -36,12 +36,12 @@ class PictureService extends Component
     /**
      * Generates a <picture> element, or <img> if no sources.
      *
-     * @param Asset $asset The asset to generate the picture element for.
+     * @param array $assetSet Array of assets to generate the picture element for.
      * @param string $assetStyle The asset style - index of imageStyles in config file
      * @param array | null $options
      * @return \Twig_Markup
      */
-    public function element(Asset $asset, $assetStyle, $options = null)
+    public function element(array $assetSet, $assetStyle, $options = null)
     {
         // priority order for configuration (low to high):
         // imageStyles config in picture config file
@@ -68,8 +68,11 @@ class PictureService extends Component
 
         $oldMode = Craft::$app->view->getTemplateMode();
         Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_CP);
-
+        $i = 0;
         foreach ((array_key_exists('sources', $style) ? $style['sources'] : []) as $source) {
+            $asset = $assetSet[$i];
+            $i++;
+            if (count($assetSet) <= $i) { $i = 0; }
             $transformedImages = $this->_transformedImages($asset, $source, $styleTransform, $optionsTransform);
             $sourcesHtml .= Craft::$app->view->renderTemplate('picture/source',
                 [
@@ -80,6 +83,7 @@ class PictureService extends Component
             );
         }
 
+        $asset = $assetSet[$i];
         if (array_key_exists('img', $style))
         {
             $img = $style['img'];
@@ -226,30 +230,34 @@ class PictureService extends Component
      */
     private function _transformedImages(Asset $asset, $config, $styleTransform, $optionsTransform)
     {
+        $transformedImages = [];
         $transform = array_merge($styleTransform, (array_key_exists('transform', $config) ? $config['transform'] : []), $optionsTransform);
         $aspectRatio = array_key_exists('aspectRatio', $config) ? $config['aspectRatio'] : null;
 
-        // what can we transform to w/o upscaling?
-        $maxTransformWidth = PictureService::_maxTransformWidth($asset, $aspectRatio, $transform);
-        // we accept either 'widths' - an array, or 'width' - a single number
-        $widths = array_key_exists('widths', $config) ? $config['widths'] : (array_key_exists('width', $config) ? [$config['width']] : []);
+        if ($asset->getExtension() != 'svg')
+        {
 
-        $transformedImages = [];
-        foreach ($widths as $width) {
-            if ($maxTransformWidth && $width <= $maxTransformWidth)
-            {
-                $transformedUrl = $asset->getUrl(PictureService::_transform($width, $aspectRatio, $transform));
-                if ($transformedUrl) {
-                    $transformedImages[] = [
-                        'width' => $width,
-                        'url' => $transformedUrl
-                    ];
+            // what can we transform to w/o upscaling?
+            $maxTransformWidth = PictureService::_maxTransformWidth($asset, $aspectRatio, $transform);
+            // we accept either 'widths' - an array, or 'width' - a single number
+            $widths = array_key_exists('widths', $config) ? $config['widths'] : (array_key_exists('width', $config) ? [$config['width']] : []);
+
+            foreach ($widths as $width) {
+                if ($maxTransformWidth && $width <= $maxTransformWidth)
+                {
+                    $transformedUrl = $asset->getUrl(PictureService::_transform($width, $aspectRatio, $transform));
+                    if ($transformedUrl) {
+                        $transformedImages[] = [
+                            'width' => $width,
+                            'url' => $transformedUrl
+                        ];
+                    }
                 }
             }
         }
         if (!$transformedImages)
         {
-            // if we didn't get any (probably because of upscaling, try at our native width)
+            // if we didn't get any (probably because of upscaling or svg, try at our native width)
             $transformedUrl = $aspectRatio ? $asset->getUrl(PictureService::_transform($asset->width, $aspectRatio, $transform)) : $asset->getUrl(null);
             if ($transformedUrl) {
                 $transformedImages[] = [

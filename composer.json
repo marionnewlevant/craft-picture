@@ -1,7 +1,7 @@
 {
   "name": "marionnewlevant/picture",
   "description": "Generate responsive <picture> and <img> elements based on configuration.",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "type": "craft-plugin",
   "keywords": [
     "craft", "craftcms", "plugin", "picture", "srcset", "lazysizes"

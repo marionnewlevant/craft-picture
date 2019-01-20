@@ -1,5 +1,10 @@
 # Picture Changelog
 
+## 2.2.0 - 2019.01.19
+### Added
+- Support for different images for different sources (art directed images)
+- Better support for svg images
+
 ## 2.1.0 - 2018.06.23
 ### Added
 - Support for [lazysizes](https://github.com/aFarkas/lazysizes)
