@@ -1,5 +1,9 @@
 # Picture Changelog
 
+## 2.2.1 - 2019.01.21
+### Fixed
+- Lazysizes img rendering bug when no config
+
 ## 2.2.0 - 2019.01.19
 ### Added
 - Support for different images for different sources (art directed images)

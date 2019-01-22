@@ -106,6 +106,7 @@ class PictureService extends Component
                     'transformedImages' => [],
                     'attrs' => $options,
                     'asset' => $asset,
+                    'lazysizes' => $lazysizes,
                 )
             );
         }
