@@ -1,5 +1,9 @@
 # Picture Changelog
 
+## 2.2.2 - 2019.03.26
+### Added
+- LazysizesTrigger for when you want something other than 'lazyload'
+
 ## 2.2.1 - 2019.01.21
 ### Fixed
 - Lazysizes img rendering bug when no config

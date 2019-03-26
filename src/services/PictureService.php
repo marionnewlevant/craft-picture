@@ -27,8 +27,10 @@ use craft\helpers\Template;
  */
 class PictureService extends Component
 {
-    private $_styles = array();
-    private $_transforms = array();
+    private $_config = [];
+    private $_styles = [];
+    private $_lazysizesTrigger = '';
+    private $_transforms = [];
 
     // Public Methods
     // =========================================================================
@@ -95,6 +97,7 @@ class PictureService extends Component
                     'attrs' => $options,
                     'asset' => $asset,
                     'lazysizes' => $lazysizes,
+                    'lazysizesTrigger' => $this->_getLazysizesTrigger(),
                 )
             );
         }
@@ -107,6 +110,7 @@ class PictureService extends Component
                     'attrs' => $options,
                     'asset' => $asset,
                     'lazysizes' => $lazysizes,
+                    'lazysizesTrigger' => $this->_getLazysizesTrigger(),
                 )
             );
         }
@@ -182,10 +186,28 @@ class PictureService extends Component
     {
         if (!$this->_styles)
         {
-            $config = Craft::$app->getConfig()->getConfigFromFile('picture');
-            $this->_styles = array_key_exists('imageStyles', $config) ? $config['imageStyles'] : [];
+            $this->_initConfig();
+            $this->_styles = array_key_exists('imageStyles', $this->_config) ? $this->_config['imageStyles'] : [];
         }
         return $this->_styles;
+    }
+
+    private function _getLazysizesTrigger()
+    {
+        if (!$this->_lazysizesTrigger)
+        {
+            $this->_initConfig();
+            $this->_lazysizesTrigger = array_key_exists('lazysizesTrigger', $this->_config) ? $this->_config['lazysizesTrigger'] : 'lazyload';
+        }
+        return $this->_lazysizesTrigger;
+    }
+
+    private function _initConfig()
+    {
+        if (!$this->_config)
+        {
+            $this->_config = Craft::$app->getConfig()->getConfigFromFile('picture');
+        }
     }
 
     /**
@@ -214,6 +236,7 @@ class PictureService extends Component
         if (!$this->_transforms)
         {
             $config = Craft::$app->getConfig()->getConfigFromFile('picture');
+            $craft->dd($config);
             $this->_transforms = array_key_exists('urlTransforms', $config) ? $config['urlTransforms'] : [];
         }
         return $this->_transforms;

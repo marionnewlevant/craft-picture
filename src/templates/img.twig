@@ -1,4 +1,4 @@
-{# passed img and transformedImages and attrs and asset and lazysizes #}
+{# passed img and transformedImages and attrs and asset and lazysizes and lazysizesTrigger #}
 {% set doLazysizes = lazysizes is not same as(false) %}
 <img
   {% if transformedImages|length > 1 %}
@@ -16,13 +16,13 @@
   {% for key, value in attrs %}
     {% if lazysizes and key == 'class' %}
       {% set classOutput = true %}
-      {{ key }}="{{ value }} lazyload"
+      {{ key }}="{{ value }} {{ lazysizesTrigger }}"
     {% else %}
       {{ key }}="{{ value }}"
     {% endif %}
   {% endfor %}
   {% if lazysizes and not classOutput %}
-    class="lazyload"
+    class="{{ lazysizesTrigger }}"
   {% endif %}
   {% if doLazysizes and (lazysizes is not same as(true)) %}
     src="{{ lazysizes }}"

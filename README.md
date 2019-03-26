@@ -125,6 +125,7 @@ Here is a sample configuration file:
         ],
 
         // the 'lazyLoaded' style for elements that use lazysizes for lazyloading.
+        // See also lazysizesTrigger config value
         // <img
         //   class="lazyload"
         //   data-srcset="transform500pxUrl 500w, transform1000pxUrl 1000w"
@@ -157,12 +158,17 @@ Here is a sample configuration file:
           'aspectRatio' => 7/3,
           'width' => 1000
         ]
-      ]
+      ],
+
+      // lazysizesTrigger is an optional override for elements loaded with
+      // lazysizes. It changes the class value from 'lazyload'
+      'lazysizesTrigger' => 'js-lazyload'
     ];
 
 To recap, the config file specifies the `imageStyles` for generating
-&lt;picture&gt; and &lt;img&gt; elements, and the `urlTransforms` for
-generating single image urls.
+&lt;picture&gt; and &lt;img&gt; elements, `urlTransforms` for
+generating single image urls, and `lazysizesTrigger` if you want to
+use lazyload with a different triggering classname.
 
 Each individual element in `imageStyles` has an optional array of `sources` and
 an `img`. The img can have:
@@ -263,6 +269,9 @@ By specifying `lazysizes` in the options, you can:
   - use ImageOptimize [placeholder images](https://github.com/nystudio107/craft-imageoptimize#placeholder-images)
   for the `src` attribute
 
+Additionally, if you want to use a different class than `lazyload` for the
+lazyloaded images, you can change that class with the `lazysizesTrigger`
+config value.
 
 ## Tips
 
