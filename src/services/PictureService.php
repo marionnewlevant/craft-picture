@@ -236,7 +236,6 @@ class PictureService extends Component
         if (!$this->_transforms)
         {
             $config = Craft::$app->getConfig()->getConfigFromFile('picture');
-            $craft->dd($config);
             $this->_transforms = array_key_exists('urlTransforms', $config) ? $config['urlTransforms'] : [];
         }
         return $this->_transforms;
