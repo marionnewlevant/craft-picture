@@ -14,14 +14,14 @@
   {{ doLazysizes ? 'data-' }}src="{{ transformedImages[0].url ?? asset.getUrl(null) }}"
   {% set classOutput = false %}
   {% for key, value in attrs %}
-    {% if key == 'class' %}
+    {% if lazysizes and key == 'class' %}
       {% set classOutput = true %}
       {{ key }}="{{ value }} lazyload"
     {% else %}
       {{ key }}="{{ value }}"
     {% endif %}
   {% endfor %}
-  {% if not classOutput %}
+  {% if lazysizes and not classOutput %}
     class="lazyload"
   {% endif %}
   {% if doLazysizes and (lazysizes is not same as(true)) %}

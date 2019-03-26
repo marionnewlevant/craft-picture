@@ -239,14 +239,14 @@ class PictureService extends Component
         {
 
             // what can we transform to w/o upscaling?
-            $maxTransformWidth = PictureService::_maxTransformWidth($asset, $aspectRatio, $transform);
+            $maxTransformWidth = self::_maxTransformWidth($asset, $aspectRatio, $transform);
             // we accept either 'widths' - an array, or 'width' - a single number
             $widths = array_key_exists('widths', $config) ? $config['widths'] : (array_key_exists('width', $config) ? [$config['width']] : []);
 
             foreach ($widths as $width) {
                 if ($maxTransformWidth && $width <= $maxTransformWidth)
                 {
-                    $transformedUrl = $asset->getUrl(PictureService::_transform($width, $aspectRatio, $transform));
+                    $transformedUrl = $asset->getUrl(self::_transform($width, $aspectRatio, $transform));
                     if ($transformedUrl) {
                         $transformedImages[] = [
                             'width' => $width,
@@ -259,7 +259,7 @@ class PictureService extends Component
         if (!$transformedImages)
         {
             // if we didn't get any (probably because of upscaling or svg, try at our native width)
-            $transformedUrl = $aspectRatio ? $asset->getUrl(PictureService::_transform($asset->width, $aspectRatio, $transform)) : $asset->getUrl(null);
+            $transformedUrl = $aspectRatio ? $asset->getUrl(self::_transform($asset->width, $aspectRatio, $transform)) : $asset->getUrl(null);
             if ($transformedUrl) {
                 $transformedImages[] = [
                     'width' => $asset->width,
