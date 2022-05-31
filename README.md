@@ -1,4 +1,4 @@
-# picture plugin for Craft 3
+# picture plugin for Craft 3 & 4
 
 Generate &lt;picture&gt; elements.
 
@@ -65,7 +65,7 @@ Here is a sample configuration file:
             'widths' => [75, 150]
           ]
         ],
-        
+
         // the 'art' style will generate a picture element with two
         // nested source elements and a nested img element
         'art' => [
@@ -141,7 +141,7 @@ Here is a sample configuration file:
             'widths' => [500, 1000]
           ]
         ],
-     
+
         // the default style will be used when none is specified.
         'default' => [
           'img' => [
@@ -176,9 +176,9 @@ an `img`. The img can have:
 - sizes: optional sizes attribute
 - widths: array of pixel widths. Must have at least one
 - aspectRatio: optional aspect ratio, width / height. Values &lt; 1 for portrait,
-values &gt; 1 for landscape.
+  values &gt; 1 for landscape.
 - transform: additional craft transform parameters (width is set by the plugin,
-and so is height if the aspect ratio is specified)
+  and so is height if the aspect ratio is specified)
 
 Each source can have all of those, plus
 
@@ -188,11 +188,11 @@ Additionally, the style as a whole can have:
 
 - transform: optional Craft transform parameters
 - lazysizes: optional value which determines whether the element will be
-lazyloaded with [lazysizes](https://github.com/aFarkas/lazysizes).
-Will generate `data-srcset`, `data-sizes` and `data-src` attributes instead of
-`srcset`, `sizes`, and `src`. Will add a `class` attribute with value
-`class="lazyload"`, or add `lazyload` to any existing `class` attribute.
-Values are:
+  lazyloaded with [lazysizes](https://github.com/aFarkas/lazysizes).
+  Will generate `data-srcset`, `data-sizes` and `data-src` attributes instead of
+  `srcset`, `sizes`, and `src`. Will add a `class` attribute with value
+  `class="lazyload"`, or add `lazyload` to any existing `class` attribute.
+  Values are:
   - false - not lazyloaded (the default)
   - true - lazyloaded, no fallback `src` attribute
   - string - lazyloaded, value will be the `src` attribute value.
@@ -212,12 +212,12 @@ Use craft.picture.element in your templates like this:
 
     {{ craft.picture.element(asset, style, options) }}
 
-- `asset` is an [Asset](https://docs.craftcms.com/api/v3/craft-elements-asset.html)
-element - a regular Craft asset OR `asset` is an array of Craft assets, in which
-case the first asset is used for the first source, the second asset for the second
-source, etc., repeating the cycle of assets if there are more assets than sources.
+- `asset` is an [Asset](https://docs.craftcms.com/api/v4/craft-elements-asset.html)
+  element - a regular Craft asset OR `asset` is an array of Craft assets, in which
+  case the first asset is used for the first source, the second asset for the second
+  source, etc., repeating the cycle of assets if there are more sources than assets.
 - `style` is the name of the image style. It is optional, and if missing,
-the _default_ style will be used.
+  the _default_ style will be used.
 - `options` is an optional hash of options.
   - `transform` - additional Craft transform parameters
   - `lazysizes` - overrides any `lazysizes` value on the image style in the config file.
@@ -238,7 +238,6 @@ position _bottom-right_ and quality of _80_:
          }
     ) }}
 
-
 Example for an _art_ style image with different images for the different sizes:
 
     {{ craft.picture.element([
@@ -254,7 +253,6 @@ For a _hero_ image used as a background image:
       style="background-image: url({{ craft.picture.url(entry.hero.one, 'hero') }})"
     ></div>
 
-
 ## integration with [ImageOptimize](https://github.com/nystudio107/craft-imageoptimize)
 
 The ImageOptimize plugin will automatically run image optimizers such as jpegoptim on your transformed images. It works well with this plugin, and no additional changes are required.
@@ -265,8 +263,8 @@ A lazysizes value can be set in either the style configuration in
 `config/picture.php` or in the options passed to `craft.picture.element`.
 By specifying `lazysizes` in the options, you can:
 
-  - turn off lazyloading for images that are "above the fold"
-  - use ImageOptimize [placeholder images](https://github.com/nystudio107/craft-imageoptimize#placeholder-images)
+- turn off lazyloading for images that are "above the fold"
+- use ImageOptimize [placeholder images](https://github.com/nystudio107/craft-imageoptimize#placeholder-images)
   for the `src` attribute
 
 Additionally, if you want to use a different class than `lazyload` for the
@@ -283,5 +281,6 @@ and generate that style in a [Preparse](https://github.com/aelvan/Preparse-Field
 field when the asset is saved to pre-build the transforms.
 
 ---
+
 Brought to you by [Marion Newlevant](http://marion.newlevant.com).
 Icon insides by [Setyo Ari Wibowo](https://thenounproject.com/search/?q=picture%20frame&i=1191340)

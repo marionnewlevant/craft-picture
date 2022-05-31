@@ -34,14 +34,13 @@ class PictureService extends Component
 
     // Public Methods
     // =========================================================================
-
     /**
      * Generates a <picture> element, or <img> if no sources.
      *
      * @param array $assetSet Array of assets to generate the picture element for.
      * @param string $assetStyle The asset style - index of imageStyles in config file
      * @param array | null $options
-     * @return \Twig_Markup
+     * @return \Twig\Markup
      */
     public function element(array $assetSet, $assetStyle, $options = null)
     {

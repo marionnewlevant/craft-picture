@@ -31,14 +31,13 @@ class PictureVariable
 {
     // Public Methods
     // =========================================================================
-
     /**
      * Generate <picture> element (or <img> if no sources)
      *
      * @param Asset $asset
      * @param string $assetStyle (from 'imageStyles' in config file)
      * @param array | null $options
-     * @return \Twig_Markup
+     * @return \Twig\Markup
      */
     public function element($assetSet, $assetStyle='default', $options=null)
     {
@@ -55,7 +54,7 @@ class PictureVariable
      * @param Asset $asset
      * @param string $assetStyle (from 'urlTransforms' in config file)
      * @param array | null $options
-     * @return \Twig_Markup
+     * @return \Twig\Markup
      */
     public function url(Asset $asset, $assetStyle='default', $options=null)
     {

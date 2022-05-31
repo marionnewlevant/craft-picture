@@ -15,6 +15,7 @@ use marionnewlevant\picture\models\Settings;
 use marionnewlevant\picture\variables\PictureVariable;
 
 use Craft;
+use craft\base\Model;
 use craft\base\Plugin;
 use craft\services\Plugins;
 use craft\events\PluginEvent;
@@ -107,7 +108,7 @@ class Picture extends Plugin
     /**
      * @inheritdoc
      */
-    protected function createSettingsModel()
+    protected function createSettingsModel(): ?Model
     {
         return new Settings();
     }
