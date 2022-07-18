@@ -18,7 +18,9 @@
       {% set classOutput = true %}
       {{ key }}="{{ value }} {{ lazysizesTrigger }}"
     {% else %}
-      {{ key }}="{{ value }}"
+       {% if key != 'sizes' or attrs.srcset is defined %}
+         {{key}}="{{value}}"
+       {% endif %}
     {% endif %}
   {% endfor %}
   {% if lazysizes and not classOutput %}
@@ -28,4 +30,3 @@
     src="{{ lazysizes }}"
   {% endif %}
 />
-
